@@ -18,7 +18,6 @@ function setIntitialData(responseJsonBase) {
   initialButtonsOff();
   pokemon.push(...responseJsonBase.results);
   filteredPokemon = pokemon;
-  console.log(pokemon);
 }
 
 async function getServerResponse(pokeUrl) {
