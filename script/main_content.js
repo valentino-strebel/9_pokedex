@@ -5,7 +5,6 @@ function init() {
 
 async function loadDataFromApi() {
   loadingScreen();
-
   resetData();
   let responseBase = await fetch(BASE_URL);
   let responseJsonBase = await responseBase.json();
@@ -53,7 +52,12 @@ async function getMonsterData() {
 }
 
 function pushMonsterData(responseJsonBase) {
-  let object = {
+  let object = prepareMonsterData(responseJsonBase);
+  pokemonDetails.push(object);
+}
+
+function prepareMonsterData(responseJsonBase) {
+  return {
     "name": responseJsonBase.name.charAt(0).toUpperCase() + responseJsonBase.name.slice(1),
     "id": responseJsonBase.id.toString().padStart(4, "0"),
     "height": responseJsonBase.height.toString() + 0,
@@ -63,7 +67,6 @@ function pushMonsterData(responseJsonBase) {
     "abilities": getAbilities(responseJsonBase),
     "moves": getMoves(responseJsonBase),
   };
-  pokemonDetails.push(object);
 }
 
 function renderPokemons() {
@@ -94,34 +97,6 @@ function renderTypes(indexPokemon) {
     document.getElementById(`pokemonType${indexPokemon}`).innerHTML += pokemonTypeInsert(insertType);
     document.getElementById(`monsterImg${indexPokemon}`).classList.add(colorType);
   }
-}
-
-function getAbilities(responseJsonBase) {
-  let abilitiesArray = [];
-  for (let indexAbilities = 0; indexAbilities < responseJsonBase.abilities.length; indexAbilities++) {
-    abilitiesArray.push({
-      "name": responseJsonBase.abilities[indexAbilities].ability.name,
-    });
-  }
-  return abilitiesArray;
-}
-
-function getTypes(responseJsonBase) {
-  let typesArray = [];
-  for (let indexTypes = 0; indexTypes < responseJsonBase.types.length; indexTypes++) {
-    typesArray.push({ "name": responseJsonBase.types[indexTypes].type.name });
-  }
-  return typesArray;
-}
-
-function getMoves(responseJsonBase) {
-  let movesArray = [];
-  if (!responseJsonBase.moves || responseJsonBase.moves.length === 0) return movesArray;
-  for (let indexMoves = 0; indexMoves < 4; indexMoves++) {
-    if (!responseJsonBase.moves[indexMoves]) break;
-    movesArray.push({ "name": responseJsonBase.moves[indexMoves].move.name });
-  }
-  return movesArray;
 }
 
 function toggleDNone(divId) {
@@ -156,7 +131,9 @@ function backToStart() {
 }
 
 function getFilterEntry(inputId) {
-  let myValue = document.getElementById(inputId).value.toLowerCase();
+  let myValue = "";
+  myValue = document.getElementById(inputId).value.toLowerCase();
+  console.log(myValue);
   if (myValue == "") {
     loadDataFromApi();
   } else if (myValue.length < 3) {
