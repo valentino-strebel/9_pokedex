@@ -22,10 +22,25 @@ let insertWeight = null;
 
 let insertHeight = null;
 
+let responseBase = null;
+
+let responseJsonBase = null;
+
+let container = null;
+
+function setInitialVariables() {
+  container = document.getElementById("container");
+}
+
 function setVariables(indexPokemon) {
   insertName = pokemonDetails[indexPokemon].name;
   insertid = pokemonDetails[indexPokemon].id;
   insertImg = pokemonDetails[indexPokemon].img;
   insertWeight = pokemonDetails[indexPokemon].weight;
   insertHeight = pokemonDetails[indexPokemon].height;
+}
+
+function setNavigationUrl(responseJsonBase) {
+  next_url = responseJsonBase.next;
+  prev_url = responseJsonBase.previous;
 }

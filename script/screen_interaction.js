@@ -29,3 +29,10 @@ function disableloadingScreen() {
   document.getElementById("overlayLoading").classList.add("d_none");
   document.getElementsByTagName("body")[0].classList.remove("overflow");
 }
+
+function initialButtonsOff() {
+  turnOffButton("backButtonOne");
+  turnOffButton("backButtonTwo");
+  turnOffButton("backStartOne");
+  turnOffButton("backStartTwo");
+}
