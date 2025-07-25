@@ -32,7 +32,7 @@ function setInitialVariables() {
   container = document.getElementById("container");
 }
 
-function setVariables(indexPokemon) {
+function setVariablesOverlay(indexPokemon) {
   insertName = pokemonDetails[indexPokemon].name;
   insertid = pokemonDetails[indexPokemon].id;
   insertImg = pokemonDetails[indexPokemon].img;

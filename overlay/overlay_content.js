@@ -1,5 +1,5 @@
 function showOverlayImage(indexPokemon) {
-  setVariables(indexPokemon);
+  setVariablesOverlay(indexPokemon);
   document.getElementById("overlayCard").innerHTML = pokemonOverlayInsert(
     insertName,
     insertid,
