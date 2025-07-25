@@ -14,7 +14,8 @@
     <script src="./script/main_content.js"></script>
     <script src="./script/template.js"></script>
     <script src="./script/overlay_content.js"></script>
-    <script src="./script/db.js"></script>
+
+    <script src="./data/variables.js"></script>
   </head>
   <body onload="init()" class="">
     <header>
@@ -31,63 +32,25 @@
       <div class="filterSection">
         <div
           title="Browse the full data base for your Pokémon. Full name required for the search"
-          class="filterContainerGlobal"
-        >
-          <input
-            id="filterInputGlobal"
-            type="text"
-            placeholder="Find globally..."
-          />
-          <button
-            class="nextButtons"
-            onclick="getFilterGlobal(`filterInputGlobal`) "
-          >
-            Go
-          </button>
+          class="filterContainerGlobal">
+          <input id="filterInputGlobal" type="text" placeholder="Find globally..." />
+          <button class="nextButtons" onclick="getFilterGlobal(`filterInputGlobal`) ">Go</button>
           <p id="demo"></p>
         </div>
-        <div
-          title="Browse the current list for your Pokémon"
-          class="filterContainerList"
-        >
-          <input
-            id="filterInputList"
-            type="text"
-            placeholder="Find on Page..."
-          />
-          <button
-            class="nextButtons"
-            onclick="getFilterEntry(`filterInputList`) "
-          >
-            Go
-          </button>
+        <div title="Browse the current list for your Pokémon" class="filterContainerList">
+          <input id="filterInputList" type="text" placeholder="Find on Page..." />
+          <button class="nextButtons" onclick="getFilterEntry(`filterInputList`) ">Go</button>
         </div>
       </div>
       <div class="buttonContainer">
-        <button id="backStartOne" class="nextButtons" onclick="backToStart()">
-          |<
-        </button>
-        <button
-          id="backButtonOne"
-          class="nextButtons"
-          onclick="newPage(prev_url)"
-        >
-          <
-        </button>
+        <button id="backStartOne" class="nextButtons" onclick="backToStart()">|<</button>
+        <button id="backButtonOne" class="nextButtons" onclick="newPage(prev_url)"><</button>
         <button class="nextButtons" onclick="newPage(next_url)">></button>
       </div>
       <div id="container"></div>
       <div class="buttonContainer">
-        <button id="backStartTwo" class="nextButtons" onclick="backToStart()">
-          |<
-        </button>
-        <button
-          id="backButtonTwo"
-          class="nextButtons"
-          onclick="newPage(prev_url)"
-        >
-          <
-        </button>
+        <button id="backStartTwo" class="nextButtons" onclick="backToStart()">|<</button>
+        <button id="backButtonTwo" class="nextButtons" onclick="newPage(prev_url)"><</button>
         <button class="nextButtons" onclick="newPage(next_url)">></button>
       </div>
     </main>
@@ -95,11 +58,7 @@
     <!--overlay to show pokemon card-->
     <div id="overlay" class="overlay d_none" onclick="toggleDNone(this.id)">
       <div class="overlayAlignment">
-        <div
-          id="overlayCard"
-          class="overlayCard"
-          onclick="stopPropagation(event)"
-        ></div>
+        <div id="overlayCard" class="overlayCard" onclick="stopPropagation(event)"></div>
       </div>
     </div>
     <!--overlay loading screen-->

@@ -1,4 +1,3 @@
-//renders main cards
 function pokemonDataInsert(insertName, insertid, insertImg, indexPokemon) {
   return `
   <div class="monsterContainer" onclick="toggleDNone('overlay'); showOverlayImage(${indexPokemon})"">
@@ -14,7 +13,6 @@ function pokemonDataInsert(insertName, insertid, insertImg, indexPokemon) {
 `;
 }
 
-//inserts type into main cards
 function pokemonTypeInsert(type) {
   return `
     <div class="typeIcon ${type}">
@@ -23,15 +21,7 @@ function pokemonTypeInsert(type) {
       `;
 }
 
-//inserts overlay data
-function pokemonOverlayInsert(
-  insertName,
-  insertid,
-  insertImg,
-  insertWeight,
-  insertHeight,
-  indexPokemon
-) {
+function pokemonOverlayInsert(insertName, insertid, insertImg, insertWeight, insertHeight, indexPokemon) {
   return `
     <div class="overMonsterContainer">
       <div class="monsterHeader">
@@ -66,7 +56,6 @@ function pokemonOverlayInsert(
   `;
 }
 
-//inserts overlay type data
 function pokemonTypeInsertOver(type) {
   return `
     <div class="typeIcon ${type}">
