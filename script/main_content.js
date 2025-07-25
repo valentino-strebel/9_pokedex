@@ -6,7 +6,7 @@ function init() {
 async function loadDataFromApi() {
   loadingScreen();
   resetData();
-  await getServerResponse();
+  await getServerResponse(BASE_URL);
   setIntitialData(responseJsonBase);
   myInitialLoop();
   getMonsterData();
@@ -21,8 +21,8 @@ function setIntitialData(responseJsonBase) {
   console.log(pokemon);
 }
 
-async function getServerResponse() {
-  responseBase = await fetch(BASE_URL);
+async function getServerResponse(pokeUrl) {
+  responseBase = await fetch(pokeUrl);
   responseJsonBase = await responseBase.json();
 }
 
