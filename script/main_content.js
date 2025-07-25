@@ -16,6 +16,7 @@ async function loadDataFromApi() {
   initialButtonsOff();
   pokemon.push(...responseJsonBase.results);
   filteredPokemon = pokemon;
+  console.log(pokemon);
   myInitialLoop();
   getMonsterData();
 }
