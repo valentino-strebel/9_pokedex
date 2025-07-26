@@ -21,7 +21,7 @@ async function loadDataFromApi() {
 }
 
 function resetData() {
-  pokemon = [];
+  pokemon.length = 0;
   pokemonDetails = [];
   urlPokemon = [];
 }
@@ -36,22 +36,16 @@ function setInitialData(data) {
 }
 
 function populateUrls() {
-  for (const poke of filteredPokemon) {
-    urlPokemon.push(poke.url);
-  }
+  urlPokemon = filteredPokemon.map((p) => p.url);
 }
 
 async function getMonsterData() {
-  for (const url of urlPokemon) {
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      pushMonsterData(data);
-    } catch {
-      alert("Please insert the full and correct name of your Pokémon");
-      await loadDataFromApi();
-      return;
-    }
+  try {
+    const responses = await Promise.all(urlPokemon.map((url) => fetch(url).then((res) => res.json())));
+    responses.forEach(pushMonsterData);
+  } catch {
+    alert("Please insert the full and correct name of your Pokémon");
+    await loadDataFromApi();
   }
 }
 
@@ -64,7 +58,7 @@ function prepareMonsterData(data) {
   return {
     name: capitalize(data.name),
     id: data.id.toString().padStart(4, "0"),
-    height: data.height + 0,
+    height: +data.height,
     weight: data.weight,
     type: getTypes(data),
     img: data.sprites?.other?.["official-artwork"]?.front_default || "",
@@ -74,31 +68,16 @@ function prepareMonsterData(data) {
 }
 
 function renderPokemons() {
-  container.innerHTML = "";
-  pokemonDetails.forEach((poke, index) => {
-    insertPokemonCard(poke, index);
-  });
-}
-
-function insertPokemonCard(poke, index) {
-  container.innerHTML += pokemonDataInsert(poke.name, poke.id, poke.img, index);
-  renderTypes(index);
+  DOM.container.innerHTML = "";
+  const html = pokemonDetails
+    .map((poke, index) => {
+      const card = pokemonDataInsert(poke.name, poke.id, poke.img, index);
+      setTimeout(() => renderTypesGeneric(poke.type, `pokemonType${index}`, `monsterImg${index}`));
+      return card;
+    })
+    .join("");
+  DOM.container.innerHTML = html;
   disableloadingScreen();
-}
-
-function renderTypes(index) {
-  const types = pokemonDetails[index].type;
-  const typeContainer = document.getElementById(`pokemonType${index}`);
-  const monsterImg = document.getElementById(`monsterImg${index}`);
-
-  if (typeContainer && monsterImg) {
-    types.forEach((type, idx) => {
-      typeContainer.innerHTML += pokemonTypeInsert(type.name);
-      if (idx === 0) {
-        monsterImg.classList.add(type.name);
-      }
-    });
-  }
 }
 
 function capitalize(str) {

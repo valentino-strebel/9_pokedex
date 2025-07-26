@@ -1,41 +1,39 @@
 function showOverlayImage(indexPokemon) {
   setVariablesOverlay(indexPokemon);
-  document.getElementById("overlayCard").innerHTML = pokemonOverlayInsert(
-    insertName,
-    insertid,
-    insertImg,
-    insertWeight,
-    insertHeight,
+
+  DOM.overlayCard.innerHTML = pokemonOverlayInsert(
+    overlayData.name,
+    overlayData.id,
+    overlayData.img,
+    overlayData.weight,
+    overlayData.height,
     indexPokemon
   );
-  renderTypesOverlay(indexPokemon);
+
+  renderTypesGeneric(
+    pokemonDetails[indexPokemon].type,
+    `overPokemonType${indexPokemon}`,
+    `overPokemonImage${indexPokemon}`
+  );
 }
 
-function renderTypesOverlay(indexPokemon) {
-  for (let indexTypes = 0; indexTypes < pokemonDetails[indexPokemon].type.length; indexTypes++) {
-    let colorType = pokemonDetails[indexPokemon].type[0].name;
-    let insertType = pokemonDetails[indexPokemon].type[indexTypes].name;
-    document.getElementById(`overPokemonType${indexPokemon}`).innerHTML += pokemonTypeInsertOver(insertType);
-    document.getElementById(`overPokemonImage${indexPokemon}`).classList.add(colorType);
-  }
+function renderTypesGeneric(types, typeContainerId, imageElementId) {
+  const typeContainer = document.getElementById(typeContainerId);
+  const imageElement = document.getElementById(imageElementId);
+
+  if (!types || !typeContainer || !imageElement) return;
+
+  const html = types.map((t) => pokemonTypeInsertOver(t.name)).join("");
+  typeContainer.innerHTML = html;
+  imageElement.classList.add(types[0]?.name);
 }
 
-function buttonPlus(insertedId) {
-  insertedId++;
-  if (insertedId >= pokemon.length) {
-    insertedId = 0;
-    showOverlayImage(insertedId);
-  } else {
-    showOverlayImage(insertedId);
-  }
+function buttonPlus(currentIndex) {
+  const nextIndex = (currentIndex + 1) % pokemon.length;
+  showOverlayImage(nextIndex);
 }
 
-function buttonMinus(insertedId) {
-  insertedId--;
-  if (insertedId < 0) {
-    insertedId = pokemon.length - 1;
-    showOverlayImage(insertedId);
-  } else {
-    showOverlayImage(insertedId);
-  }
+function buttonMinus(currentIndex) {
+  const prevIndex = (currentIndex - 1 + pokemon.length) % pokemon.length;
+  showOverlayImage(prevIndex);
 }

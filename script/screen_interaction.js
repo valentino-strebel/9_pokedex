@@ -1,18 +1,19 @@
 function turnOffButton(id) {
+  const button = DOM.buttons[id];
+  if (!button) return;
+
   if (prev_url == null) {
-    document.getElementById(id).classList.add("d_none");
+    button.classList.add("d_none");
   } else {
-    document.getElementById(id).classList.remove("d_none");
+    button.classList.remove("d_none");
   }
 }
 
 function newPage(selectedUrl) {
+  if (!selectedUrl) return;
+
   BASE_URL = selectedUrl;
-  if (BASE_URL == null) {
-    return;
-  } else {
-    loadDataFromApi();
-  }
+  loadDataFromApi();
 }
 
 function backToStart() {
@@ -21,18 +22,15 @@ function backToStart() {
 }
 
 function loadingScreen() {
-  document.getElementById("overlayLoading").classList.remove("d_none");
-  document.getElementsByTagName("body")[0].classList.add("overflow");
+  DOM.overlayLoading?.classList.remove("d_none");
+  DOM.body?.classList.add("overflow");
 }
 
 function disableloadingScreen() {
-  document.getElementById("overlayLoading").classList.add("d_none");
-  document.getElementsByTagName("body")[0].classList.remove("overflow");
+  DOM.overlayLoading?.classList.add("d_none");
+  DOM.body?.classList.remove("overflow");
 }
 
 function initialButtonsOff() {
-  turnOffButton("backButtonOne");
-  turnOffButton("backButtonTwo");
-  turnOffButton("backStartOne");
-  turnOffButton("backStartTwo");
+  Object.keys(DOM.buttons).forEach(turnOffButton);
 }

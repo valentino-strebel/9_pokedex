@@ -45,12 +45,12 @@
           title="Browse the full data base for your Pokémon. Full name required for the search"
           class="filterContainerGlobal">
           <input id="filterInputGlobal" type="text" placeholder="Find globally..." />
-          <button class="nextButtons" onclick="getFilterGlobal(`filterInputGlobal`) ">Go</button>
+          <button class="nextButtons" onclick="filterByExactName(`filterInputGlobal`) ">Go</button>
           <p id="demo"></p>
         </div>
         <div title="Browse the current list for your Pokémon" class="filterContainerList">
           <input id="filterInputList" type="text" placeholder="Find on Page..." />
-          <button class="nextButtons" onclick="getFilterEntry(`filterInputList`) ">Go</button>
+          <button class="nextButtons" onclick="filterByPartialName(`filterInputList`) ">Go</button>
         </div>
       </div>
       <div class="buttonContainer">
