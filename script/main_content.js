@@ -1,28 +1,23 @@
-function init() {
+async function init() {
   loadingScreen();
-  loadDataFromApi();
+  await loadDataFromApi();
 }
 
 async function loadDataFromApi() {
   loadingScreen();
   resetData();
-  await getServerResponse(BASE_URL);
-  setIntitialData(responseJsonBase);
-  myInitialLoop();
-  getMonsterData();
-}
 
-function setIntitialData(responseJsonBase) {
-  setInitialVariables();
-  setNavigationUrl(responseJsonBase);
-  initialButtonsOff();
-  pokemon.push(...responseJsonBase.results);
-  filteredPokemon = pokemon;
-}
+  try {
+    const response = await fetch(BASE_URL);
+    const responseJson = await response.json();
 
-async function getServerResponse(pokeUrl) {
-  responseBase = await fetch(pokeUrl);
-  responseJsonBase = await responseBase.json();
+    setInitialData(responseJson);
+    populateUrls();
+    await getMonsterData();
+    renderPokemons();
+  } catch (err) {
+    alert("Failed to load data from API.");
+  }
 }
 
 function resetData() {
@@ -31,65 +26,81 @@ function resetData() {
   urlPokemon = [];
 }
 
-function myInitialLoop() {
-  for (let index = 0; index < filteredPokemon.length; index++) {
-    urlPokemon.push(filteredPokemon[index].url);
+function setInitialData(data) {
+  setInitialVariables();
+  setNavigationUrl(data);
+  initialButtonsOff();
+
+  pokemon.push(...data.results);
+  filteredPokemon = [...pokemon];
+}
+
+function populateUrls() {
+  for (const poke of filteredPokemon) {
+    urlPokemon.push(poke.url);
   }
 }
 
 async function getMonsterData() {
-  try {
-    for (let indexUrl = 0; indexUrl < urlPokemon.length; indexUrl++) {
-      let responseBase = await fetch(urlPokemon[indexUrl]);
-      let responseJsonBase = await responseBase.json();
-      pushMonsterData(responseJsonBase);
+  for (const url of urlPokemon) {
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      pushMonsterData(data);
+    } catch {
+      alert("Please insert the full and correct name of your Pokémon");
+      await loadDataFromApi();
+      return;
     }
-  } catch (err) {
-    loadDataFromApi();
-    alert("Please insert the full and correct name of your Pokémon");
   }
-  renderPokemons();
 }
 
-function pushMonsterData(responseJsonBase) {
-  let object = prepareMonsterData(responseJsonBase);
-  pokemonDetails.push(object);
+function pushMonsterData(data) {
+  const monster = prepareMonsterData(data);
+  pokemonDetails.push(monster);
 }
 
-function prepareMonsterData(responseJsonBase) {
+function prepareMonsterData(data) {
   return {
-    "name": responseJsonBase.name.charAt(0).toUpperCase() + responseJsonBase.name.slice(1),
-    "id": responseJsonBase.id.toString().padStart(4, "0"),
-    "height": responseJsonBase.height.toString() + 0,
-    "weight": responseJsonBase.weight,
-    "type": getTypes(responseJsonBase),
-    "img": responseJsonBase.sprites.other["official-artwork"].front_default,
-    "abilities": getAbilities(responseJsonBase),
-    "moves": getMoves(responseJsonBase),
+    name: capitalize(data.name),
+    id: data.id.toString().padStart(4, "0"),
+    height: data.height + 0,
+    weight: data.weight,
+    type: getTypes(data),
+    img: data.sprites?.other?.["official-artwork"]?.front_default || "",
+    abilities: getAbilities(data),
+    moves: getMoves(data),
   };
 }
 
 function renderPokemons() {
   container.innerHTML = "";
-  for (let indexPokemon = 0; indexPokemon < pokemonDetails.length; indexPokemon++) {
-    getInsertData(pokemonDetails, indexPokemon);
-  }
+  pokemonDetails.forEach((poke, index) => {
+    insertPokemonCard(poke, index);
+  });
 }
 
-function getInsertData(pokemonDetails, indexPokemon) {
-  let insertName = pokemonDetails[indexPokemon].name;
-  let insertid = pokemonDetails[indexPokemon].id;
-  let insertImg = pokemonDetails[indexPokemon].img;
-  container.innerHTML += pokemonDataInsert(insertName, insertid, insertImg, indexPokemon);
-  renderTypes(indexPokemon);
+function insertPokemonCard(poke, index) {
+  container.innerHTML += pokemonDataInsert(poke.name, poke.id, poke.img, index);
+  renderTypes(index);
   disableloadingScreen();
 }
 
-function renderTypes(indexPokemon) {
-  for (let indexTypes = 0; indexTypes < pokemonDetails[indexPokemon].type.length; indexTypes++) {
-    let colorType = pokemonDetails[indexPokemon].type[0].name;
-    let insertType = pokemonDetails[indexPokemon].type[indexTypes].name;
-    document.getElementById(`pokemonType${indexPokemon}`).innerHTML += pokemonTypeInsert(insertType);
-    document.getElementById(`monsterImg${indexPokemon}`).classList.add(colorType);
+function renderTypes(index) {
+  const types = pokemonDetails[index].type;
+  const typeContainer = document.getElementById(`pokemonType${index}`);
+  const monsterImg = document.getElementById(`monsterImg${index}`);
+
+  if (typeContainer && monsterImg) {
+    types.forEach((type, idx) => {
+      typeContainer.innerHTML += pokemonTypeInsert(type.name);
+      if (idx === 0) {
+        monsterImg.classList.add(type.name);
+      }
+    });
   }
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }

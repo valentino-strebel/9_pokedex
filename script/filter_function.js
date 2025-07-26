@@ -1,32 +1,34 @@
-function getFilterEntry(inputId) {
-  let myValue = "";
-  myValue = document.getElementById(inputId).value.toLowerCase();
+async function getFilterEntry(inputId) {
+  const myValue = document.getElementById(inputId).value.toLowerCase();
   console.log(myValue);
-  if (myValue == "") {
-    loadDataFromApi();
+
+  if (myValue === "") {
+    await loadDataFromApi();
   } else if (myValue.length < 3) {
     alert("Please enter more than 2 letters!");
   } else {
-    filterForStuff(myValue);
+    await filterByName(myValue);
   }
 }
 
-function filterForStuff(filteredName) {
-  filteredPokemon = pokemon.filter(function (fill) {
-    return fill.name.includes(filteredName);
-  });
-  resetData();
-  myInitialLoop();
-  getMonsterData();
+async function filterByName(filteredName) {
+  filteredPokemon = pokemon.filter((p) => p.name.includes(filteredName));
+  urlPokemon = filteredPokemon.map((p) => p.url);
+
+  pokemonDetails = [];
+  await getMonsterData();
+  renderPokemons();
 }
 
-function getFilterGlobal(inputId) {
-  let myValue = document.getElementById(inputId).value.toLowerCase();
-  if (myValue == "") {
-    loadDataFromApi();
+async function getFilterGlobal(inputId) {
+  const myValue = document.getElementById(inputId).value.toLowerCase();
+
+  if (myValue === "") {
+    await loadDataFromApi();
   } else {
     resetData();
-    urlPokemon.push("https://pokeapi.co/api/v2/pokemon/" + myValue);
-    getMonsterData();
+    urlPokemon.push(`${BASE_URL}${myValue}`); // assumes BASE_URL ends with `/pokemon/`
+    await getMonsterData();
+    renderPokemons();
   }
 }
