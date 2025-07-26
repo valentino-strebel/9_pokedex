@@ -27,7 +27,7 @@ async function getFilterGlobal(inputId) {
     await loadDataFromApi();
   } else {
     resetData();
-    urlPokemon.push(`${BASE_URL}${myValue}`); // assumes BASE_URL ends with `/pokemon/`
+    urlPokemon.push(`${BASE_URL}/${myValue}`);
     await getMonsterData();
     renderPokemons();
   }

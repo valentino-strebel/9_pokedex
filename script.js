@@ -1,8 +1,10 @@
 function toggleDNone(divId) {
-  document.getElementById(divId).classList.toggle("d_none");
-  document.getElementsByTagName("body")[0].classList.toggle("overflow");
+  let div = document.getElementById(divId);
+  let body = document.body;
+  if (div) {
+    div.classList.toggle("d_none");
+    body.classList.toggle("overflow");
+  }
 }
 
-function stopPropagation(event) {
-  event.stopPropagation();
-}
+const stopPropagation = (event) => event.stopPropagation();
