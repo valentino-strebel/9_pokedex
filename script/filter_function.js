@@ -1,3 +1,11 @@
+/**
+ * Filters the Pokémon list based on a partial name input (case-insensitive).
+ * If the input is empty, it either loads from the API or re-renders the current list.
+ * If the input has less than 3 characters, an alert is shown.
+ * Otherwise, it filters and renders the matching Pokémon.
+ *
+ * @param {string} inputId - The ID of the input element containing the partial name.
+ */
 async function filterByPartialName(inputId) {
   const inputValue = document.getElementById(inputId).value.toLowerCase();
 
@@ -17,6 +25,13 @@ async function filterByPartialName(inputId) {
   await loadAndRenderFilteredData();
 }
 
+/**
+ * Filters the Pokémon list by exact name match.
+ * If the input is empty, it loads all Pokémon from the API.
+ * Otherwise, it resets the current data and fetches the Pokémon by name.
+ *
+ * @param {string} inputId - The ID of the input element containing the exact name.
+ */
 async function filterByExactName(inputId) {
   const inputValue = document.getElementById(inputId).value.toLowerCase();
 
@@ -30,6 +45,10 @@ async function filterByExactName(inputId) {
   await loadAndRenderFilteredData();
 }
 
+/**
+ * Loads detailed Pokémon data from `urlPokemon` and renders them to the DOM.
+ * This clears the `pokemonDetails` array before fetching.
+ */
 async function loadAndRenderFilteredData() {
   pokemonDetails = [];
   await getMonsterData();
